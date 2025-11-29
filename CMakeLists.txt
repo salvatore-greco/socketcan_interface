@@ -1,12 +1,36 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(socketcan_interface)
+include(FetchContent)
 
-find_package(catkin REQUIRED
-  COMPONENTS
-    class_loader
+FetchContent_Declare(
+  console_bridge
+  GIT_REPOSITORY https://github.com/ros/console_bridge.git
+  GIT_TAG 81ec67f6daf3cd19ef506e00f02efb1645597b9c
 )
+FetchContent_MakeAvailable(console_bridge)
 
-find_package(console_bridge REQUIRED)
+
+
+include_directories(${console_bridge_SOURCE_DIR}/include)
+set(console_bridge_DIR ${PROJECT_SOURCE_DIR})
+
+FetchContent_Declare(
+  class_loader
+  GIT_REPOSITORY https://github.com/ros/class_loader.git
+  GIT_TAG 007c4e2d359bd9294671ff5605a771affebe8de6
+)
+FetchContent_Populate(class_loader)
+
+FetchContent_MakeAvailable(class_loader)
+include_directories(${class_loader_SOURCE_DIR}/include)
+
+
+# find_package(catkin REQUIRED
+#   COMPONENTS
+#     class_loader
+# )
+
+
 
 find_package(Boost REQUIRED
   COMPONENTS
@@ -17,22 +41,9 @@ find_package(Boost REQUIRED
 
 find_package(Threads REQUIRED)
 
-catkin_package(
-  INCLUDE_DIRS
-    include
-  LIBRARIES
-    ${PROJECT_NAME}_string
-  CATKIN_DEPENDS
-  DEPENDS
-    Boost
-    console_bridge
-)
-
 include_directories(
   include
   ${Boost_INCLUDE_DIRS}
-  ${catkin_INCLUDE_DIRS}
-  ${console_bridge_INCLUDE_DIRS}
 )
 
 # ${PROJECT_NAME}_string
@@ -48,7 +59,7 @@ add_executable(socketcan_dump
 target_link_libraries(socketcan_dump
    ${PROJECT_NAME}_string
    ${console_bridge_LIBRARIES}
-   ${catkin_LIBRARIES}
+   
    ${Boost_LIBRARIES}
    ${CMAKE_THREAD_LIBS_INIT}
 )
@@ -61,7 +72,7 @@ add_executable(socketcan_bcm
 target_link_libraries(socketcan_bcm
    ${PROJECT_NAME}_string
    ${console_bridge_LIBRARIES}
-   ${catkin_LIBRARIES}
+
    ${Boost_LIBRARIES}
 )
 
@@ -75,28 +86,23 @@ target_link_libraries(${PROJECT_NAME}_plugin
   ${Boost_LIBRARIES}
 )
 
-install(
-  TARGETS
+install(TARGETS
     socketcan_bcm
     socketcan_dump
     ${PROJECT_NAME}_plugin
     ${PROJECT_NAME}_string
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
 )
 
-install(
-  DIRECTORY
-    include/${PROJECT_NAME}/
-  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-  FILES_MATCHING PATTERN "*.h"
+install(DIRECTORY include/${PROJECT_NAME}/
+    DESTINATION include/${PROJECT_NAME}
+    FILES_MATCHING PATTERN "*.h"
 )
 
-install(
-  FILES
-    ${PROJECT_NAME}_plugin.xml
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+install(FILES ${PROJECT_NAME}_plugin.xml
+    DESTINATION share/${PROJECT_NAME}
 )
 if(CATKIN_ENABLE_TESTING)
   find_package(xmlrpcpp REQUIRED)
@@ -107,7 +113,7 @@ if(CATKIN_ENABLE_TESTING)
   target_link_libraries(${PROJECT_NAME}-test_dummy_interface
     ${PROJECT_NAME}_string
     ${console_bridge_LIBRARIES}
-    ${catkin_LIBRARIES}
+ 
     ${Boost_LIBRARIES}
   )
 
@@ -116,7 +122,7 @@ if(CATKIN_ENABLE_TESTING)
   )
   target_link_libraries(${PROJECT_NAME}-test_delegates
     ${PROJECT_NAME}_string
-    ${catkin_LIBRARIES}
+ 
     ${Boost_LIBRARIES}
   )
 
@@ -128,7 +134,7 @@ if(CATKIN_ENABLE_TESTING)
   )
   target_link_libraries(${PROJECT_NAME}-test_settings
     ${PROJECT_NAME}_string
-    ${catkin_LIBRARIES}
+ 
     ${xmlrpcpp_LIBRARIES}
   )
 
@@ -138,7 +144,7 @@ if(CATKIN_ENABLE_TESTING)
   target_link_libraries(${PROJECT_NAME}-test_string
     ${PROJECT_NAME}_string
     ${console_bridge_LIBRARIES}
-    ${catkin_LIBRARIES}
+ 
   )
 
   catkin_add_gtest(${PROJECT_NAME}-test_filter
@@ -147,7 +153,7 @@ if(CATKIN_ENABLE_TESTING)
   target_link_libraries(${PROJECT_NAME}-test_filter
     ${PROJECT_NAME}_string
     ${console_bridge_LIBRARIES}
-    ${catkin_LIBRARIES}
+ 
     ${Boost_LIBRARIES}
   )
 
@@ -156,7 +162,7 @@ if(CATKIN_ENABLE_TESTING)
   )
   target_link_libraries(${PROJECT_NAME}-test_dispatcher
     ${PROJECT_NAME}_string
-    ${catkin_LIBRARIES}
+ 
     ${Boost_LIBRARIES}
   )
   target_compile_options(${PROJECT_NAME}-test_dispatcher PRIVATE -Wno-deprecated-declarations)
