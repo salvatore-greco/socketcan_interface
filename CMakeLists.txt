@@ -20,7 +20,6 @@ FetchContent_Declare(
   GIT_TAG 007c4e2d359bd9294671ff5605a771affebe8de6
   FIND_PACKAGE_ARGS NAMES console_bridge
 )
-FetchContent_Populate(class_loader)
 
 FetchContent_MakeAvailable(console_bridge class_loader)
 include_directories(${class_loader_SOURCE_DIR}/include)
