@@ -5,7 +5,7 @@ include(FetchContent)
 FetchContent_Declare(
   console_bridge
   GIT_REPOSITORY https://github.com/ros/console_bridge.git
-  GIT_TAG 81ec67f6daf3cd19ef506e00f02efb1645597b9c
+  GIT_TAG 0828d846f2d4940b4e2b5075c6c724991d0cd308
 )
 
 
