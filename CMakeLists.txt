@@ -7,7 +7,7 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/ros/console_bridge.git
   GIT_TAG 81ec67f6daf3cd19ef506e00f02efb1645597b9c
 )
-FetchContent_MakeAvailable(console_bridge)
+
 
 
 
@@ -18,10 +18,11 @@ FetchContent_Declare(
   class_loader
   GIT_REPOSITORY https://github.com/ros/class_loader.git
   GIT_TAG 007c4e2d359bd9294671ff5605a771affebe8de6
+  FIND_PACKAGE_ARGS NAMES console_bridge
 )
 FetchContent_Populate(class_loader)
 
-FetchContent_MakeAvailable(class_loader)
+FetchContent_MakeAvailable(console_bridge class_loader)
 include_directories(${class_loader_SOURCE_DIR}/include)
 
 
