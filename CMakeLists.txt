@@ -50,6 +50,7 @@ target_link_libraries(socketcan_dump
    
    ${Boost_LIBRARIES}
    ${CMAKE_THREAD_LIBS_INIT}
+   class_loader
 )
 
 # socketcan_bcm
