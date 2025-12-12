@@ -3,25 +3,13 @@ project(socketcan_interface)
 include(FetchContent)
 
 FetchContent_Declare(
-  console_bridge
-  GIT_REPOSITORY https://github.com/ros/console_bridge.git
-  GIT_TAG 0828d846f2d4940b4e2b5075c6c724991d0cd308
-)
-
-
-
-
-include_directories(${console_bridge_SOURCE_DIR}/include)
-set(console_bridge_DIR ${PROJECT_SOURCE_DIR})
-
-FetchContent_Declare(
   class_loader
   GIT_REPOSITORY https://github.com/ros/class_loader.git
   GIT_TAG 007c4e2d359bd9294671ff5605a771affebe8de6
-  FIND_PACKAGE_ARGS NAMES console_bridge
+  # FIND_PACKAGE_ARGS NAMES console_bridge
 )
 
-FetchContent_MakeAvailable(console_bridge class_loader)
+FetchContent_MakeAvailable(class_loader)
 include_directories(${class_loader_SOURCE_DIR}/include)
 
 
@@ -82,7 +70,6 @@ add_library(${PROJECT_NAME}_plugin
 )
 target_link_libraries(${PROJECT_NAME}_plugin
   ${console_bridge_LIBRARIES}
-  ${catkin_LIBRARIES}
   ${Boost_LIBRARIES}
 )
 
