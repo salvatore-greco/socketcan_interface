@@ -2,14 +2,14 @@ cmake_minimum_required(VERSION 3.0.2)
 project(socketcan_interface)
 include(FetchContent)
 
-FetchContent_Declare(
-  class_loader
-  GIT_REPOSITORY https://github.com/ros/class_loader.git
-  GIT_TAG 007c4e2d359bd9294671ff5605a771affebe8de6
-  # FIND_PACKAGE_ARGS NAMES console_bridge
-)
-
-FetchContent_MakeAvailable(class_loader)
+# FetchContent_Declare(
+#   class_loader
+#   GIT_REPOSITORY https://github.com/ros/class_loader.git
+#   GIT_TAG 007c4e2d359bd9294671ff5605a771affebe8de6
+#   # FIND_PACKAGE_ARGS NAMES console_bridge
+# )
+#
+# FetchContent_MakeAvailable(class_loader)
 include_directories(${class_loader_SOURCE_DIR}/include)
 
 
